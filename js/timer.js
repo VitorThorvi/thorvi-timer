@@ -26,15 +26,20 @@
 * importada ela poderá ter qualquer nome
 * */
 
-export default function Timer ({
-    displayMinutes,
-    displaySeconds,
-    timerTimeOut,
-    resetControls,
-}) {
+export default function Timer({
+                                  displayMinutes,
+                                  displaySeconds,
+                                  resetControls,
+                              }) {
 
-    function updateDisplay(minutes, seconds) {
-        displayMinutes["textContent"] = String(minutes).padStart(2, "0")
+    let timerTimeOut
+    let minutes = Number(displayMinutes.textContent)
+
+    function updateDisplay(newMinutes, seconds) {
+
+        newMinutes = newMinutes === undefined ? minutes : newMinutes //ternário
+        seconds = seconds === undefined ? 0 : seconds
+        displayMinutes["textContent"] = String(newMinutes).padStart(2, "0")
         displaySeconds["textContent"] = String(seconds).padStart(2, "0")
     }
 
@@ -47,16 +52,18 @@ export default function Timer ({
         timerTimeOut = setTimeout(function () {
             let seconds = Number(displaySeconds.textContent)
             let minutes = Number(displayMinutes.textContent)
+            let isFinished = minutes <= 0 && seconds <= 0
 
             updateDisplay(minutes, 0)
 
-            if (minutes <= 0) {
+            if (isFinished) {
                 resetControls()
+                updateDisplay()
                 return
             }
 
             if (seconds <= 0) {
-                seconds = 3
+                seconds = 60
                 --minutes
             }
 
@@ -66,10 +73,20 @@ export default function Timer ({
         }, 1000)
     }
 
+    function updateMinutes(newMinutes) {
+        minutes = newMinutes
+    }
+
+    function hold() {
+        clearTimeout(timerTimeOut)
+    }
+
     return {
         countdown,
         reset,
-        updateDisplay
+        updateDisplay,
+        updateMinutes,
+        hold
     }
 }
 

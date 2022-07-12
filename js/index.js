@@ -3,14 +3,12 @@ import "./controls"
 import "./timer"
 */
 // default import
-import resetControls from "./controls.js";
-import { Timer } from "./timer.js";
+import Timer from "./timer.js";
+import Controls from "./controls.js";
 /*
 named import
 import { countdown, resetTimer } from "./timer";
 */
-
-
 
 
 /*
@@ -38,30 +36,33 @@ const displaySeconds = document.querySelector('.seconds')
 let minutes = Number(displayMinutes.textContent)
 let timerTimeOut
 
-const timer = Timer ({
+const controls = Controls({
+    pauseButton,
+    playButton,
+    setButton,
+    stopButton
+})
+
+const timer = Timer({
     displayMinutes,
     displaySeconds,
     timerTimeOut,
-    resetControls,
+    resetControls: controls.reset,
 })
 
 playButton.addEventListener('click', function () {
-    playButton.classList.add('hide')
-    pauseButton.classList.remove('hide')
-    setButton.classList.add('hide')
-    stopButton.classList.remove('hide')
+    controls.play()
     timer.countdown()
 
 })
 
 pauseButton.addEventListener('click', function () {
-    pauseButton.classList.add('hide')
-    playButton.classList.remove('hide')
+    controls.pause()
     clearTimeout(timerTimeOut)
 })
 
 stopButton.addEventListener('click', function () {
-    resetControls()
+    controls.reset()
     timer.resetTimer()
 })
 
@@ -76,12 +77,14 @@ soundButtonOn.addEventListener('click', function () {
 })
 
 setButton.addEventListener('click', function () {
-    let newMinutes = prompt('Quantos minutos?')
+    let newMinutes = controls.getMinutes()
+
     if (!newMinutes) {
-        timer.resetTimer()
+        timer.reset()
         return
     }
 
     minutes = newMinutes
-    updateTimerDisplay(minutes, 0)
+    timer.updateDisplay(minutes, 0)
+
 })

@@ -5,6 +5,18 @@ import "./timer"
 // default import
 import Timer from "./timer.js";
 import Controls from "./controls.js";
+import Sounds from "./sounds.js";
+import {
+    playButton,
+    pauseButton,
+    stopButton,
+    setButton,
+    soundButtonOn,
+    soundButtonOff,
+    displayMinutes,
+    displaySeconds
+} from "./elements.js"
+
 /*
 named import
 import { countdown, resetTimer } from "./timer";
@@ -25,14 +37,6 @@ import { countdown, resetTimer } from "./timer";
 
 // Callback: função chamada como argumento de outra função
 
-let playButton = document.querySelector('.play')
-let pauseButton = document.querySelector('.pause')
-let stopButton = document.querySelector('.stop')
-let setButton = document.querySelector('.set')
-const soundButtonOn = document.querySelector('.sound-on')
-const soundButtonOff = document.querySelector('.sound-off')
-const displayMinutes = document.querySelector('.minutes')
-const displaySeconds = document.querySelector('.seconds')
 
 const controls = Controls({
     pauseButton,
@@ -47,33 +51,41 @@ const timer = Timer({
     resetControls: controls.reset,
 })
 
+const sound = Sounds()
+
 playButton.addEventListener('click', function () {
     controls.play()
     timer.countdown()
+    sound.pressButton()
 
 })
 
 pauseButton.addEventListener('click', function () {
     controls.pause()
     timer.hold()
+    sound.pressButton()
 })
 
 stopButton.addEventListener('click', function () {
     controls.reset()
     timer.reset()
+    sound.pressButton()
 })
 
 soundButtonOff.addEventListener('click', function () {
     soundButtonOff.classList.add('hide')
     soundButtonOn.classList.remove('hide')
+    sound.bgAudio.pause()
 })
 
 soundButtonOn.addEventListener('click', function () {
     soundButtonOn.classList.add('hide')
     soundButtonOff.classList.remove('hide')
+    sound.bgAudio.play()
 })
 
 setButton.addEventListener('click', function () {
+    sound.pressButton()
     let newMinutes = controls.getMinutes()
 
     if (!newMinutes) {

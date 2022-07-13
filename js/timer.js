@@ -1,32 +1,3 @@
-/*
-* Este arquivo representa um módulo.
-* Um módulo não pode ter vários exports.
-* Para poder exportar as várias funções devemos
-* ter um named export
-* */
-
-
-/*
-* Abaixo em 'function timer () temos um
-* design patter chamado factory.
-* é uma função que retorna um objeto.
-* */
-
-/* se usar a sintaxe:
-* export function timer () {...}
-* estarei utilizando um named export e
-* consequentemente onde for importar
-* precisarei usar o mesmo nome dado
-* aqui neste escopo
-*
-* Por esse motivo é preferível usar a sintaxe:
-* export default function timer () {...}
-* pois assim, tendo apenas uma função
-* exportada, no local em que ela for
-* importada ela poderá ter qualquer nome
-* */
-
-
 import Sounds from "./sounds.js";
 
 
